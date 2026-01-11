@@ -137,7 +137,7 @@ class BaselineModel:
         
         accuracy = accuracy_score(y_true, y_pred)
         
-        print(f"\n📊 Model Performance:")
+        print(f"\nModel Performance:")
         print(f"   Test Accuracy: {accuracy:.3f}")
         print(classification_report(y_true, y_pred, target_names=['Negative', 'Positive']))
         
