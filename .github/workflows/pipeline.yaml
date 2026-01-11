@@ -1,0 +1,23 @@
+name: AIOps Fairness Pipeline
+on: [push]
+
+jobs:
+  train-and-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run MLflow Experiment
+        run: |
+
+      - name: Fairness Gate (Unit Test)
+        run: |
