@@ -79,8 +79,10 @@ def train_and_plot_adversarial(config, dataset_train, dataset_test):
         ax = axes[0, 0]
         ax.plot(iterations, clf_losses, 'b-', alpha=0.3, linewidth=1, label='Raw')
         # Add smoothed curve
-        if len(clf_losses) > 50:
-            window = 100
+        if len(clf_losses) > 1:
+            window = min(50, len(clf_losses) // 5)
+            if window < 5:
+                window = 5
             smoothed = np.convolve(clf_losses, np.ones(window)/window, mode='valid')
             ax.plot(range(window-1, len(clf_losses)), smoothed, 'b-', linewidth=2, label='Smoothed')
         ax.set_xlabel('Iteration')
@@ -92,8 +94,10 @@ def train_and_plot_adversarial(config, dataset_train, dataset_test):
         # Plot 2: Adversary loss over iterations
         ax = axes[0, 1]
         ax.plot(iterations, adv_losses, 'r-', alpha=0.3, linewidth=1, label='Raw')
-        if len(adv_losses) > 50:
-            window = 100
+        if len(adv_losses) > 1:
+            window = min(50, len(adv_losses) // 5)
+            if window < 5:
+                window = 5
             smoothed = np.convolve(adv_losses, np.ones(window)/window, mode='valid')
             ax.plot(range(window-1, len(adv_losses)), smoothed, 'r-', linewidth=2, label='Smoothed')
         ax.set_xlabel('Iteration')
@@ -104,8 +108,10 @@ def train_and_plot_adversarial(config, dataset_train, dataset_test):
         
         # Plot 3: Both losses together (smoothed)
         ax = axes[1, 0]
-        if len(clf_losses) > 50:
-            window = 100
+        if len(clf_losses) > 1:
+            window = min(50, len(clf_losses) // 5)
+            if window < 5:
+                window = 5
             clf_smoothed = np.convolve(clf_losses, np.ones(window)/window, mode='valid')
             adv_smoothed = np.convolve(adv_losses, np.ones(window)/window, mode='valid')
             iters_smooth = range(window-1, len(clf_losses))

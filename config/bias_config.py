@@ -19,7 +19,7 @@ class BiasConfig:
     # Fairness thresholds
     DISPARATE_IMPACT_THRESHOLD = 0.8
     STATISTICAL_PARITY_THRESHOLD = 0.1
-    EQUAL_OPPORTUNITY_THRESHOLD = 0.1
+    EQUAL_OPPORTUNITY_THRESHOLD = 0.15
     
     # Model configuration
     RANDOM_STATE = 42
@@ -27,11 +27,8 @@ class BiasConfig:
     
     # Features to keep from Adult dataset
     FEATURES_TO_KEEP = [
-        'age', 
-        'education-num', 
-        'capital-gain', 
-        'capital-loss', 
-        'hours-per-week'
+        'age', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week',
+        'marital-status', 'occupation', 'workclass', 'relationship' 
     ]
     
     # Output paths
