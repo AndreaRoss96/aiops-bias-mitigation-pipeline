@@ -61,15 +61,32 @@ class BaselineModel:
         # Scale features
         X_train_scaled = self.scaler.fit_transform(X_train)
         
+        # Check for instance weights (from reweighing)
+        sample_weights = None
+        if hasattr(dataset_train, 'instance_weights'):
+            sample_weights = dataset_train.instance_weights.ravel()
+            print(f"   ✓ Using instance weights (reweighed data)")
+        
         # Initialize and train model
         self._init_model()
-        self.model.fit(X_train_scaled, y_train)
+        
+        # Train with or without sample weights
+        if sample_weights is not None:
+            self.model.fit(X_train_scaled, y_train, sample_weight=sample_weights)
+        else:
+            self.model.fit(X_train_scaled, y_train)
         
         self.is_trained = True
         
         # Calculate training accuracy
         train_pred = self.model.predict(X_train_scaled)
         train_acc = accuracy_score(y_train, train_pred)
+        
+        # Store training history
+        self.training_history = {
+            'accuracy': train_acc,
+            'model_type': self.model_type
+        }
         
         print(f"   ✓ Training completed")
         print(f"   ✓ Training accuracy: {train_acc:.3f}")
@@ -137,7 +154,7 @@ class BaselineModel:
         
         accuracy = accuracy_score(y_true, y_pred)
         
-        print(f"\nModel Performance:")
+        print(f"\n📊 Model Performance:")
         print(f"   Test Accuracy: {accuracy:.3f}")
         print(classification_report(y_true, y_pred, target_names=['Negative', 'Positive']))
         
