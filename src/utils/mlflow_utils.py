@@ -28,8 +28,8 @@ class MLflowTracker:
         self.config = config
         self.experiment_name = experiment_name
         
-        # Set tracking URI from environment or use default
-        tracking_uri = os.getenv('MLFLOW_TRACKING_URI', 'mlruns')
+        # Set tracking URI from environment or use SQLite database
+        tracking_uri = os.getenv('MLFLOW_TRACKING_URI', 'sqlite:///mlflow.db')
         mlflow.set_tracking_uri(tracking_uri)
         
         # Set or create experiment
