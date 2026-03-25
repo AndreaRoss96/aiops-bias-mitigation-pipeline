@@ -5,7 +5,6 @@ import pandas as pd
 Data loading utilities
 """
 
-
 class DatasetLoader:
     """
     Load and prepare datasets for bias mitigation
@@ -19,17 +18,29 @@ class DatasetLoader:
         Load UCI Adult Income dataset
         Protected attribute: sex (gender bias)
         """
+        # Define which possible features in the Adult dataset are categorical
+        all_categorical_cols = [
+            'workclass', 'education', 'marital-status', 'occupation', 
+            'relationship', 'race', 'native-country'
+        ]
+        
+        # Cross-reference with your FEATURES_TO_KEEP to find which ones to encode
+        categorical_to_encode = [
+            f for f in self.config.FEATURES_TO_KEEP 
+            if f in all_categorical_cols
+        ]
+
         dataset = AdultDataset(
             protected_attribute_names=[self.config.PROTECTED_ATTRIBUTE],
             privileged_classes=[['Male']],
-            categorical_features=[],
+            categorical_features=categorical_to_encode,
             features_to_keep=self.config.FEATURES_TO_KEEP
         )
         
-        print(f"✓ Adult dataset loaded")
+        print("✓ Adult dataset loaded")
         print(f"  - Total samples: {len(dataset.labels)}")
         print(f"  - Protected attribute: {self.config.PROTECTED_ATTRIBUTE}")
-        print(f"  - Features: {len(self.config.FEATURES_TO_KEEP)}")
+        print(f"  - Features: {len(self.config.FEATURES_TO_KEEP)} (Categorical: {len(categorical_to_encode)})")
         
         return dataset
     
@@ -83,7 +94,7 @@ class DatasetLoader:
             seed=self.config.RANDOM_STATE
         )
         
-        print(f"✓ Dataset split completed")
+        print("✓ Dataset split completed")
         print(f"  - Training samples: {len(dataset_train.labels)}")
         print(f"  - Test samples: {len(dataset_test.labels)}")
         
