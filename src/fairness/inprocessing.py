@@ -17,7 +17,7 @@ class InprocessingMitigation:
         self.config = config
         self.sess = None
     
-    def train_adversarial_debiasing(self, dataset_train, dataset_test=None):
+    def train_adversarial_debiasing(self, dataset_train, dataset_test=None, adversary_loss_weight=0.1):
         """
         Adversarial Debiasing
         
@@ -30,12 +30,13 @@ class InprocessingMitigation:
         Args:
             dataset_train: AIF360 BinaryLabelDataset
             dataset_test: Optional test dataset for validation
+            adversary_loss_weight: Weight for adversary loss (higher = more fairness)
         
         Returns:
             dataset_pred: Predictions on test set (if provided)
             model: Trained adversarial debiasing model
         """
-        print("\n🔧 Training Adversarial Debiasing Model...")
+        print(f"\n🔧 Training Adversarial Debiasing Model (weight={adversary_loss_weight})...")
         
         # Create new TensorFlow session
         if self.sess is not None:
@@ -43,17 +44,17 @@ class InprocessingMitigation:
         
         self.sess = tf.Session()
         
-        # Initialize adversarial debiasing
+        # Initialize adversarial debiasing with improved hyperparameters for fairness
         debiaser = AdversarialDebiasing(
             privileged_groups=self.config.PRIVILEGED_GROUPS,
             unprivileged_groups=self.config.UNPRIVILEGED_GROUPS,
-            scope_name='adversarial_debiasing',
-            debias=True,
+            scope_name=f'adv_debias_{adversary_loss_weight}',
+            debias=True,  # Ensure debiasing is enabled
             sess=self.sess,
-            num_epochs=50,
-            batch_size=128,
-            classifier_num_hidden_units=200,
-            adversary_loss_weight=0.1
+            num_epochs=100,  # Increase epochs for better convergence
+            batch_size=64,  # Smaller batch size for stability
+            classifier_num_hidden_units=200,  # More capacity
+            adversary_loss_weight=adversary_loss_weight
         )
         
         # Train model

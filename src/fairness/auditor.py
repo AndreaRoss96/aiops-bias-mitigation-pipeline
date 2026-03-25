@@ -69,10 +69,10 @@ class BiasAuditor:
         """
         Print dataset bias report
         """
-        print(f"\nDataset Fairness Metrics:")
+        print("\nDataset Fairness Metrics:")
         print(f"   Disparate Impact: {metrics['disparate_impact']:.3f}")
         print(f"   Statistical Parity Diff: {metrics['statistical_parity_difference']:.3f}")
-        print(f"\nBase Rates:")
+        print("\nBase Rates:")
         print(f"   Unprivileged group: {metrics['base_rate_unprivileged']:.3f}")
         print(f"   Privileged group: {metrics['base_rate_privileged']:.3f}")
         print(f"\n{'='*70}\n")
@@ -81,7 +81,7 @@ class BiasAuditor:
         """
         Print detailed model audit report
         """
-        print(f"\nFairness Metrics:")
+        print("\nFairness Metrics:")
         print(f"   Disparate Impact: {metrics['disparate_impact']:.3f} "
               f"{'PASS' if metrics.get('disparate_impact_pass') else '❌ FAIL'} "
               f"(threshold: {self.config.DISPARATE_IMPACT_THRESHOLD})")
@@ -93,29 +93,29 @@ class BiasAuditor:
         print(f"   Equal Opportunity Difference: {metrics['equal_opportunity_difference']:.3f}")
         print(f"   Average Odds Difference: {metrics['average_odds_difference']:.3f}")
         
-        print(f"\nModel Performance:")
+        print("\nModel Performance:")
         print(f"   Accuracy: {metrics['accuracy']:.3f}")
         print(f"   Balanced Accuracy: {metrics['balanced_accuracy']:.3f}")
         
-        print(f"\nTrue Positive Rates:")
+        print("\nTrue Positive Rates:")
         print(f"   Unprivileged group: {metrics['tpr_unprivileged']:.3f}")
         print(f"   Privileged group: {metrics['tpr_privileged']:.3f}")
         print(f"   Difference: {abs(metrics['tpr_unprivileged'] - metrics['tpr_privileged']):.3f}")
         
-        print(f"\nFalse Positive Rates:")
+        print("\nFalse Positive Rates:")
         print(f"   Unprivileged group: {metrics['fpr_unprivileged']:.3f}")
         print(f"   Privileged group: {metrics['fpr_privileged']:.3f}")
         
-        # THE GATE - This is the critical part
+        # THE GATE
         gate_passed = metrics.get('fairness_gate_passed', False)
         if gate_passed:
-            print(f"\nFAIRNESS GATE: PASSED")
-            print(f"   Model meets all fairness requirements")
+            print("\nFAIRNESS GATE: PASSED")
+            print("   Model meets all fairness requirements")
         else:
-            print(f"\nFAIRNESS GATE: FAILED")
-            print(f"    Model does NOT meet fairness requirements")
-            print(f"    Build should FAIL (like a failing unit test)")
-            print(f"    Apply mitigation before proceeding")
+            print("\nFAIRNESS GATE: FAILED")
+            print("    Model does NOT meet fairness requirements")
+            print("    Build should FAIL (like a failing unit test)")
+            print("    Apply mitigation before proceeding")
         
         print(f"{'='*70}\n")
         
